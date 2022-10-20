@@ -50,6 +50,15 @@ pip-compile:
 	pip-compile requirements/dev.in
 	pip-compile requirements/test.in
 
+#########
+# Local #
+########
+
+## run-app-dev:             runs the FastAPI api with hot reloading
+.PHONY: run-app-dev
+run-app-dev:
+	PYTHONPATH=. uvicorn ml_inference.api:app --reload
+
 #################
 # Test and Lint #
 #################

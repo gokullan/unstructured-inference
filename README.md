@@ -28,6 +28,13 @@ Once the model has detected the layout and OCR'd the document, you can run
 `layout.pages[0].elements` to see the elements that were extracted from the first
 page. You can convert a given element to a `dict` by running the `.to_dict()` method.
 
+To use layout parsing API locally, run `make run-app-dev`.
+Then you can hit the endpoint and upload a PDF file to see its layout with the command:
+```
+curl -X 'POST' 'http://127.0.0.1:8000/layout/pdf' -F 'file=@<your_pdf_file>' | jq -C . | less -R
+```
+You may need to install `poppler` for the endpoint with the command `brew install poppler`.
+
 ## Security Policy
 
 See our [security policy](https://github.com/Unstructured-IO/ml-inference/security/policy) for
