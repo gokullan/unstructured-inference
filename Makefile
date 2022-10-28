@@ -51,6 +51,15 @@ pip-compile:
 	pip-compile requirements/test.in
 
 #########
+# Build #
+#########
+
+## docker-build:            builds the docker container for detectron2
+.PHONY: docker-build
+docker-build:
+	PIP_VERSION=${PIP_VERSION}  ./scripts/docker-build.sh
+
+#########
 # Local #
 ########
 
@@ -58,6 +67,16 @@ pip-compile:
 .PHONY: run-app-dev
 run-app-dev:
 	PYTHONPATH=. uvicorn ml_inference.api:app --reload
+
+## start-app-local:         runs FastAPI in the container with hot reloading
+.PHONY: start-app-local
+start-app-local:
+	docker run --name=ml-inference-container -p 127.0.0.1:5000:5000 ml-inference-dev
+
+## stop-app-local:          stops the container
+.PHONY: stop-app-local
+stop-app-local:
+	docker stop ml-inference-container | xargs docker rm
 
 #################
 # Test and Lint #

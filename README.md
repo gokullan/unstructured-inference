@@ -28,12 +28,13 @@ Once the model has detected the layout and OCR'd the document, you can run
 `layout.pages[0].elements` to see the elements that were extracted from the first
 page. You can convert a given element to a `dict` by running the `.to_dict()` method.
 
-To use layout parsing API locally, run `make run-app-dev`.
-Then you can hit the endpoint and upload a PDF file to see its layout with the command:
+To build the Docker container, run `make docker-build`. Note that the CPU on an Apple M1 chip is limited to building `Detectron2` on Docker, you should build it on Linux. To run the API locally, use `make start-app-local`. You can stop the API with `make stop-app-local`. The API will run at `http:/127.0.0.1:5000`. You can view the swagger documentation at `http://127.0.0.1:5000/docs`.
+Then you can hit the API endpoint and upload a PDF file to see its layout with the command:
 ```
-curl -X 'POST' 'http://127.0.0.1:8000/layout/pdf' -F 'file=@<your_pdf_file>' | jq -C . | less -R
+curl -X 'POST' 'http://127.0.0.1:5000/layout/pdf' -F 'file=@<your_pdf_file>' | jq -C . | less -R
 ```
-You may need to install `poppler` for the endpoint with the command `brew install poppler`.
+
+If you are using an Apple M1 chip, use `make run-app-dev` instead of `make start-app-local` to start the API with hot reloading. The API will run at `http:/127.0.0.1:8000`.
 
 ## Security Policy
 
