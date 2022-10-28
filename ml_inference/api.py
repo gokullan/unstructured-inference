@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, status, Request, UploadFile
 from ml_inference.inference.layout import DocumentLayout
 import os
 import shutil
@@ -22,3 +22,8 @@ async def layout_parsing_pdf(file: UploadFile = File()):
     ]
 
     return {"pages": pages_layout}
+
+
+@app.get("/healthcheck", status_code=status.HTTP_200_OK)
+async def healthcheck(request: Request):
+    return {"healthcheck": "HEALTHCHECK STATUS: EVERYTHING OK!"}

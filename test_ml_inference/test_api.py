@@ -32,3 +32,9 @@ def test_layout_parsing_pdf_api(sample_pdf_content, tmpdir, monkeypatch):
     )
 
     assert response.status_code == 200
+
+
+def test_healthcheck(monkeypatch):
+    client = TestClient(app)
+    response = client.get("/healthcheck")
+    assert response.status_code == 200

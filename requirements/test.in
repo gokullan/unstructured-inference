@@ -9,5 +9,3 @@ mypy
 pytest-cov
 label_studio_sdk
 vcrpy
-fastapi
-python-multipart
