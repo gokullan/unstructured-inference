@@ -34,6 +34,15 @@ Then you can hit the API endpoint and upload a PDF file to see its layout with t
 curl -X 'POST' 'http://127.0.0.1:5000/layout/pdf' -F 'file=@<your_pdf_file>' | jq -C . | less -R
 ```
 
+You can also choose the types of elements you want to return from the output of PDF parsing by passing a list of types to the `include_elems` parameter. For example, if you only want to return `Text` elements and `Title` elements, you can curl:
+```
+curl -X 'POST' 'http://127.0.0.1:5000/layout/pdf' \
+-F 'file=@<your_pdf_file>' \
+-F include_elems=Text \
+-F include_elems=Title \
+ | jq -C | less -R
+```
+
 If you are using an Apple M1 chip, use `make run-app-dev` instead of `make start-app-local` to start the API with hot reloading. The API will run at `http:/127.0.0.1:8000`.
 
 ## Security Policy

@@ -26,11 +26,7 @@ def test_layout_parsing_pdf_api(sample_pdf_content, tmpdir, monkeypatch):
         f.write(sample_pdf_content)
 
     client = TestClient(app)
-    response = client.post(
-        "/layout/pdf",
-        files={"file": (filename, open(filename, "rb"))},
-    )
-
+    response = client.post("/layout/pdf", files={"file": (filename, open(filename, "rb"))})
     assert response.status_code == 200
 
 
