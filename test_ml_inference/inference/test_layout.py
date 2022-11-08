@@ -63,7 +63,7 @@ class MockLayoutModel:
 
 
 def test_get_page_elements(monkeypatch, mock_page_layout):
-    monkeypatch.setattr(detectron2, "model", MockLayoutModel(mock_page_layout))
+    monkeypatch.setattr(detectron2, "load_default_model", lambda: MockLayoutModel(mock_page_layout))
     monkeypatch.setattr(detectron2, "is_detectron2_available", lambda *args: True)
 
     image = np.random.randint(12, 24, (40, 40))
@@ -85,7 +85,7 @@ def test_get_page_elements_with_ocr(monkeypatch):
     text_block = TextBlock(rectangle, text=None, type="Title")
     layout = Layout([text_block])
 
-    monkeypatch.setattr(detectron2, "model", MockLayoutModel(layout))
+    monkeypatch.setattr(detectron2, "load_default_model", lambda: MockLayoutModel(layout))
     monkeypatch.setattr(detectron2, "is_detectron2_available", lambda *args: True)
 
     image = np.random.randint(12, 24, (40, 40))
@@ -101,7 +101,7 @@ def test_read_pdf(monkeypatch, mock_page_layout):
 
     layouts = Layout([mock_page_layout, mock_page_layout])
 
-    monkeypatch.setattr(detectron2, "model", MockLayoutModel(mock_page_layout))
+    monkeypatch.setattr(detectron2, "load_default_model", lambda: MockLayoutModel(mock_page_layout))
     monkeypatch.setattr(detectron2, "is_detectron2_available", lambda *args: True)
 
     with patch.object(lp, "load_pdf", return_value=(layouts, images)):

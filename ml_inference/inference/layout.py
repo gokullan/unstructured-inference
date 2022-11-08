@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
 
 import layoutparser as lp
+from layoutparser.models.detectron2.layoutmodel import Detectron2LayoutModel
 import numpy as np
 from PIL import Image
 
@@ -52,7 +53,11 @@ class DocumentLayout:
         return doc_layout
 
     @classmethod
-    def from_file(cls, filename: str):
+    def from_file(cls, filename: str, model: Optional[Detectron2LayoutModel] = None):
+        # NOTE(alan): For now the model is a Detectron2LayoutModel but in the future it should
+        # be an abstract class that supports some standard interface and can accomodate either
+        # a locally instantiated model or an API. Maybe even just a callable that accepts an
+        # image and returns a dict, or something.
         logger.info(f"Reading PDF for file: {filename} ...")
         layouts, images = lp.load_pdf(filename, load_images=True)
         pages: List[PageLayout] = list()
@@ -60,7 +65,7 @@ class DocumentLayout:
             image = images[i]
             # NOTE(robinson) - In the future, maybe we detect the page number and default
             # to the index if it is not detected
-            page = PageLayout(number=i, image=image, layout=layout)
+            page = PageLayout(number=i, image=image, layout=layout, model=model)
             page.get_elements()
             pages.append(page)
         return cls.from_pages(pages)
@@ -69,11 +74,18 @@ class DocumentLayout:
 class PageLayout:
     """Class for an individual PDF page."""
 
-    def __init__(self, number: int, image: Image, layout: lp.Layout):
+    def __init__(
+        self,
+        number: int,
+        image: Image,
+        layout: lp.Layout,
+        model: Optional[Detectron2LayoutModel] = None,
+    ):
         self.image = image
         self.image_array: Union[np.ndarray, None] = None
         self.layout = layout
         self.number = number
+        self.model = model
         self.elements: List[LayoutElement] = list()
 
     def __str__(self):
@@ -82,12 +94,13 @@ class PageLayout:
     def get_elements(self, inplace=True) -> Optional[List[LayoutElement]]:
         """Uses a layoutparser model to detect the elements on the page."""
         logger.info("Detecting page elements ...")
-        detectron2.load_model()
+        if self.model is None:
+            self.model = detectron2.load_default_model()
 
         elements = list()
         # NOTE(mrobinson) - We'll want make this model inference step some kind of
         # remote call in the future.
-        image_layout = detectron2.model.detect(self.image)
+        image_layout = self.model.detect(self.image)
         # NOTE(robinson) - This orders the page from top to bottom. We'll need more
         # sophisticated ordering logic for more complicated layouts.
         image_layout.sort(key=lambda element: element.coordinates[1], inplace=True)

@@ -44,7 +44,7 @@ COPY ml_inference ml_inference
 RUN python3.8 -m pip install  --no-cache  -r requirements-base.txt \
   && python3.8 -m pip install  --no-cache  -r requirements-dev.txt \
   &&  python3.8 -m pip install --no-cache "detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2" \
-  && python3.8 -c "import ml_inference.models.detectron2 as detectron2; detectron2.load_model()"
+  && python3.8 -c "import ml_inference.models.detectron2 as detectron2; detectron2.load_default_model()"
 
 EXPOSE 5000
 
