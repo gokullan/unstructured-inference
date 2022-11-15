@@ -63,6 +63,11 @@ docker-build:
 # Local #
 ########
 
+## download-models          downloads unstructured models (AWS credentials must be in environment variables)
+.PHONY: download-models
+download-models:
+	./scripts/dl-models.sh
+
 ## run-app-dev:             runs the FastAPI api with hot reloading
 .PHONY: run-app-dev
 run-app-dev:

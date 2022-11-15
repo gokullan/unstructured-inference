@@ -28,7 +28,7 @@ def load_model(
     label_map: Optional[Dict[int, str]] = None,
     extra_config: Optional[list] = None,
     device: Optional[str] = None,
-):
+) -> Detectron2LayoutModel:
     """Loads the detectron2 model using the specified parameters"""
 
     if not is_detectron2_available():
@@ -50,7 +50,7 @@ def load_model(
     return model
 
 
-def load_default_model():
+def load_default_model() -> Detectron2LayoutModel:
     return load_model(
         config_path=DETECTRON_CONFIG, label_map=DEFAULT_LABEL_MAP, extra_config=DEFAULT_EXTRA_CONFIG
     )
