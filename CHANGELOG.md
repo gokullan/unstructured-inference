@@ -1,5 +1,6 @@
-## 0.1.0-dev5
+## 0.1.0-dev6
 
+* Added ability to change base path in dl-models script
 * Added the ability to call for alternative models in the API
 * Added the ability to set custom model parameters
 * Added an arg for API to choose types of return elements in PDF parsing
