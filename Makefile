@@ -1,4 +1,4 @@
-PACKAGE_NAME := ml_inference
+PACKAGE_NAME := unstructured_inference
 PIP_VERSION := 22.3
 
 
@@ -71,7 +71,7 @@ download-models:
 ## run-app-dev:             runs the FastAPI api with hot reloading
 .PHONY: run-app-dev
 run-app-dev:
-	PYTHONPATH=. uvicorn ml_inference.api:app --reload
+	PYTHONPATH=. uvicorn unstructured_inference.api:app --reload
 
 ## start-app-local:         runs FastAPI in the container with hot reloading
 .PHONY: start-app-local

@@ -1,7 +1,7 @@
 import os
 
-from ml_inference import MODEL_LOCATION
-from ml_inference.models.detectron2 import load_model, Detectron2LayoutModel
+from unstructured_inference import MODEL_LOCATION
+from unstructured_inference.models.detectron2 import load_model, Detectron2LayoutModel
 
 
 def get_model(model: str) -> Detectron2LayoutModel:

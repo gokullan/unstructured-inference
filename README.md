@@ -6,12 +6,14 @@
   <p>Open-Source Pre-Processing Tools for Unstructured Data</p>
 </h3>
 
-The `ml-inference` repo contains hosted model inference code for layout parsing models. These
+The `unstructured-inference` repo contains hosted model inference code for layout parsing models. These
 models are invoked via API as part of the partitioning bricks in the `unstructured` package.
 
 ## Installation
 
-To install the dependencies, run `make install`.
+Requires `torch>=1.8`. Once this is satisfied, run `pip install unstructured-inference`.
+
+For development, clone the repo and run `make install`.
 Run `make help` for a full list of install options.
 
 ## Getting Started
@@ -19,7 +21,7 @@ Run `make help` for a full list of install options.
 To get started with the layout parsing model, use the following commands:
 
 ```python
-from ml_inference.inference.layout import DocumentLayout
+from unstructured_inference.inference.layout import DocumentLayout
 
 layout = DocumentLayout.from_file("<filename>")
 ```
@@ -47,7 +49,7 @@ If you are using an Apple M1 chip, use `make run-app-dev` instead of `make start
 
 ## Security Policy
 
-See our [security policy](https://github.com/Unstructured-IO/ml-inference/security/policy) for
+See our [security policy](https://github.com/Unstructured-IO/unstructured-inference/security/policy) for
 information on how to report security vulnerabilities.
 
 ## Learn more

@@ -1,6 +1,6 @@
 import pytest
 
-from ml_inference import models
+from unstructured_inference import models
 
 
 class MockModel:

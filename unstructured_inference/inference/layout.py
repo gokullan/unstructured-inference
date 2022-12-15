@@ -7,9 +7,9 @@ from layoutparser.models.detectron2.layoutmodel import Detectron2LayoutModel
 import numpy as np
 from PIL import Image
 
-from ml_inference.logger import get_logger
-import ml_inference.models.tesseract as tesseract
-import ml_inference.models.detectron2 as detectron2
+from unstructured_inference.logger import get_logger
+import unstructured_inference.models.tesseract as tesseract
+import unstructured_inference.models.detectron2 as detectron2
 
 logger = get_logger()
 

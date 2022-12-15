@@ -1,6 +1,6 @@
 from fastapi import FastAPI, File, status, Request, UploadFile, Form, HTTPException
-from ml_inference.inference.layout import DocumentLayout
-from ml_inference.models import get_model
+from unstructured_inference.inference.layout import DocumentLayout
+from unstructured_inference.models import get_model
 from typing import List
 import tempfile
 

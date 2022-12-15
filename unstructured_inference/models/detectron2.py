@@ -7,7 +7,7 @@ from layoutparser.models.detectron2.layoutmodel import (
 )
 from layoutparser.models.model_config import LayoutModelConfig
 
-from ml_inference.logger import get_logger
+from unstructured_inference.logger import get_logger
 
 logger = get_logger()
 

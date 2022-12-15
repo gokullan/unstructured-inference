@@ -38,17 +38,17 @@ ENV PATH="/home/${NB_USER}/.local/bin:${PATH}"
 
 COPY requirements/dev.txt requirements-dev.txt
 COPY requirements/base.txt requirements-base.txt
-COPY ml_inference ml_inference
+COPY unstructured_inference unstructured_inference
 COPY .models .models
 
 # NOTE(crag) - Cannot use an ARG in the dst= path (so it seems), hence no ${NB_USER}, ${NB_UID}
 RUN python3.8 -m pip install  --no-cache  -r requirements-base.txt \
   && python3.8 -m pip install  --no-cache  -r requirements-dev.txt \
   &&  python3.8 -m pip install --no-cache "detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2" \
-  && python3.8 -c "import ml_inference.models.detectron2 as detectron2; detectron2.load_default_model()"
+  && python3.8 -c "import unstructured_inference.models.detectron2 as detectron2; detectron2.load_default_model()"
 
 EXPOSE 5000
 
-ENTRYPOINT ["uvicorn", "ml_inference.api:app", \
+ENTRYPOINT ["uvicorn", "unstructured_inference.api:app", \
   "--host", "0.0.0.0", \
   "--port", "5000"]

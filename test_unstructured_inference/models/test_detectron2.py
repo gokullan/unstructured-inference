@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 
-import ml_inference.models.detectron2 as detectron2
+import unstructured_inference.models.detectron2 as detectron2
 
 
 class MockDetectron2LayoutModel:

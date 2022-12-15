@@ -1,5 +1,7 @@
-## 0.1.0-dev6
+## 0.1.0-dev7
 
+* Added `setup.py`
+* Renamed to `unstructured-inference`
 * Added ability to change base path in dl-models script
 * Added the ability to call for alternative models in the API
 * Added the ability to set custom model parameters

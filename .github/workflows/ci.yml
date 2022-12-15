@@ -96,7 +96,7 @@ jobs:
       with:
         filters: |
           src:
-            - 'ml_inference/**'
+            - 'unstructured_inference/**'
 
     - if: steps.changes.outputs.src == 'true' && github.ref != 'refs/heads/main'
       uses: dangoslen/changelog-enforcer@v3

@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 
-import ml_inference.models.tesseract as tesseract
+import unstructured_inference.models.tesseract as tesseract
 
 
 class MockTesseractAgent:

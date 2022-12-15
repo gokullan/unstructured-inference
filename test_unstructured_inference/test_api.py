@@ -3,10 +3,10 @@ import os
 
 from fastapi.testclient import TestClient
 
-from ml_inference.api import app
-from ml_inference import models
-from ml_inference.inference.layout import DocumentLayout
-import ml_inference.models.detectron2 as detectron2
+from unstructured_inference.api import app
+from unstructured_inference import models
+from unstructured_inference.inference.layout import DocumentLayout
+import unstructured_inference.models.detectron2 as detectron2
 
 
 @pytest.fixture

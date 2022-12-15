@@ -6,9 +6,9 @@ from layoutparser.elements import Layout, Rectangle, TextBlock
 import numpy as np
 from PIL import Image
 
-from ml_inference.inference.layout import DocumentLayout, PageLayout
-import ml_inference.models.detectron2 as detectron2
-import ml_inference.models.tesseract as tesseract
+from unstructured_inference.inference.layout import DocumentLayout, PageLayout
+import unstructured_inference.models.detectron2 as detectron2
+import unstructured_inference.models.tesseract as tesseract
 
 
 @pytest.fixture
