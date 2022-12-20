@@ -54,6 +54,7 @@ class DocumentLayout:
 
     @classmethod
     def from_file(cls, filename: str, model: Optional[Detectron2LayoutModel] = None):
+        """Creates a DocumentLayout from a pdf file."""
         # NOTE(alan): For now the model is a Detectron2LayoutModel but in the future it should
         # be an abstract class that supports some standard interface and can accomodate either
         # a locally instantiated model or an API. Maybe even just a callable that accepts an
