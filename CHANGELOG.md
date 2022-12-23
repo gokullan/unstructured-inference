@@ -1,6 +1,7 @@
-## 0.2.1-dev0
+## 0.2.1-dev1
 
-* Removes BasicConfig from logger configuration
+* Use logger from unstructured
+* Remove BasicConfig from logger configuration
 * Implement auto model downloading
 
 ## 0.2.0
