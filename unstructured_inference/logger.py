@@ -1,3 +1,3 @@
 import logging
 
-logger = logging.getLogger("unstructured_inference")
+logger = logging.getLogger("unstructured")
