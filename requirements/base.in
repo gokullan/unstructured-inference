@@ -2,3 +2,6 @@ fastapi
 layoutparser[layoutmodels,tesseract]
 python-multipart
 uvicorn
+onnx==1.13.0
+onnxruntime==1.13.1
+opencv_python==4.7.0.68
