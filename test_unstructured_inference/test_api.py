@@ -51,6 +51,22 @@ def test_layout_parsing_pdf_api(sample_pdf_content, tmpdir, monkeypatch):
     )
     assert response.status_code == 422
 
+def test_layout_v02_parsing_image():
+
+    filename = os.path.join("sample-docs", "test-image.jpg")
+    
+    client = TestClient(app)
+    response = client.post("/layout/v0.2/image", 
+                            headers={"Accept":"multipart/mixed"},
+                            files=[
+                                ("files", (filename, open(filename, "rb"), "image/png"))
+                            ],
+                            )
+    # The example sent to the test contains 13 detections
+    assert len(response.json()['Detections'])==13 
+    # Each detection should have (x1,y1,x2,y2,probability,class) format
+    assert len(response.json()['Detections'][0])==6
+    assert response.status_code == 200
 
 def test_healthcheck(monkeypatch):
     client = TestClient(app)

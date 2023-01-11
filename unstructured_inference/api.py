@@ -1,21 +1,23 @@
 from fastapi import FastAPI, File, status, Request, UploadFile, Form, HTTPException
 from unstructured_inference.inference.layout import DocumentLayout
 from unstructured_inference.models import get_model
-from typing import List
+from typing import List, Union
 import tempfile
 import cv2
 import onnxruntime
+import yolox_functions
 from yolox_functions import preproc as preprocess
 from yolox_functions import demo_postprocess,multiclass_nms
 from visualize import vis
 import numpy as np
 import os
 import wget
+from PIL import Image
 
 S3_SOURCE="https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
 LAYOUT_CLASSES=["Caption","Footnote","Formula","List-item","Page-footer","Page-header","Picture","Section-header","Table","Text","Title"]
-YOLOX_MODEL="path/..."
-output_dir="..."
+YOLOX_MODEL="/Users/benjamin/Documents/unstructured-inference/.models/yolox_l0.05.onnx"
+output_dir="outputs/"
 
 app = FastAPI()
 
@@ -52,11 +54,10 @@ async def layout_parsing_pdf(
 
     return {"pages": pages_layout}
 
-@app.post("/layout_v0.2/image")
+@app.post("/layout/v0.2/image")
 async def layout_v02_parsing_image(
-    file: UploadFile = File(),
-    include_elems: List[str] = Form(default=ALL_ELEMS),
-    model: str = Form(default=None),
+    request: Request,
+    files: Union[List[UploadFile], None] = File(default=None),
 ):
     if not os.path.exists(".models/yolox_l0.05.onnx"):
         wget.download(S3_SOURCE,'.models/yolox_l0.05.onnx')
@@ -65,8 +66,8 @@ async def layout_v02_parsing_image(
     # TODO: check other shapes for inference
     input_shape = (1024,768) 
     with tempfile.NamedTemporaryFile() as tmp_file:
-        tmp_file.write(file.file.read())
-        origin_img = cv2.imread(tmp_file)
+        tmp_file.write(files[0].file.read())
+        origin_img = cv2.imread(tmp_file.name)
         img,ratio = preprocess(origin_img,input_shape)
 
         session= onnxruntime.InferenceSession(YOLOX_MODEL)
@@ -90,12 +91,18 @@ async def layout_v02_parsing_image(
             origin_img = vis(origin_img, final_boxes, final_scores, final_cls_inds,
                             conf=0.3, class_names=LAYOUT_CLASSES)
 
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        output_path = os.path.join(output_dir, os.path.basename(tmp_file))
-        cv2.imwrite(output_path, origin_img)
-        #Returning dummy value temporarily
-    return {"RESULT": "IMAGE_PROCESSED"}
+        detections=[]
+        for det in dets:
+            detection = det.tolist()
+            detection[-1] = LAYOUT_CLASSES[int(detection[-1])]
+            detections.append(detection)
+
+        #if not os.path.exists(output_dir):
+        #    os.makedirs(output_dir)
+        #output_path = os.path.join(output_dir, os.path.basename(tmp_file.name),".jpg") #the  tmp_file laks of extension
+        #cv2.imwrite(output_path, origin_img)
+    
+    return {"Detections" : detections}
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
