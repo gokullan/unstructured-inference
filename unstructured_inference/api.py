@@ -10,7 +10,9 @@ from yolox_functions import demo_postprocess,multiclass_nms
 from visualize import vis
 import numpy as np
 import os
+import wget
 
+S3_SOURCE="https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
 LAYOUT_CLASSES=["Caption","Footnote","Formula","List-item","Page-footer","Page-header","Picture","Section-header","Table","Text","Title"]
 YOLOX_MODEL="path/..."
 output_dir="..."
@@ -56,6 +58,9 @@ async def layout_v02_parsing_image(
     include_elems: List[str] = Form(default=ALL_ELEMS),
     model: str = Form(default=None),
 ):
+    if not os.path.exists(".models/yolox_l0.05.onnx"):
+        wget.download(S3_SOURCE,'.models/yolox_l0.05.onnx')
+        
     # The model was trained and exported with this shape
     # TODO: check other shapes for inference
     input_shape = (1024,768) 

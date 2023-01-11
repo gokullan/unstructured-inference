@@ -5,3 +5,5 @@ uvicorn
 onnx==1.13.0
 onnxruntime==1.13.1
 opencv_python==4.7.0.68
+boto3==1.26.47
+wget
