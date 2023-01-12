@@ -57,7 +57,7 @@ setup(
     entry_points={},
     install_requires=[
         "fastapi",
-        "detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2",
+        "detectron2@git+https://github.com/facebookresearch/detectron2.git@78d5b4f335005091fe0364ce4775d711ec93566e",
         "layoutparser[layoutmodels,tesseract]",
         "python-multipart",
         "uvicorn",
