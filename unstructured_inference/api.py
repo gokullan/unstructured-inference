@@ -5,10 +5,9 @@ from typing import List, Union
 import tempfile
 import cv2
 import onnxruntime
-import yolox_functions
-from yolox_functions import preproc as preprocess
-from yolox_functions import demo_postprocess,multiclass_nms
-from visualize import vis
+from unstructured_inference.yolox_functions import preproc as preprocess
+from unstructured_inference.yolox_functions import demo_postprocess,multiclass_nms
+from unstructured_inference.visualize import vis
 import numpy as np
 import os
 import wget
