@@ -1,12 +1,12 @@
-import pytest
 import os
 
+import pytest
 from fastapi.testclient import TestClient
 
-from unstructured_inference.api import app
-from unstructured_inference import models
-from unstructured_inference.inference.layout import DocumentLayout
 import unstructured_inference.models.detectron2 as detectron2
+from unstructured_inference import models
+from unstructured_inference.api import app
+from unstructured_inference.inference.layout import DocumentLayout
 
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def test_layout_parsing_pdf_api(sample_pdf_content, tmpdir, monkeypatch):
     )
     assert response.status_code == 422
 
-def test_layout_v02_parsing_image():
+def test_layout_v02_api_parsing_image():
 
     filename = os.path.join("sample-docs", "test-image.jpg")
     
@@ -67,6 +67,16 @@ def test_layout_v02_parsing_image():
     # Each detection should have (x1,y1,x2,y2,probability,class) format
     assert len(response.json()['Detections'][0])==6
     assert response.status_code == 200
+
+def test_layout_v02_local_parsing_image():
+    filename = os.path.join("sample-docs", "test-image.jpg")
+    from unstructured_inference.layout_model import local_inference
+
+    detections = local_inference(filename)
+    # The example sent to the test contains 13 detections
+    assert len(detections['Detections'])==13
+    # Each detection should have (x1,y1,x2,y2,probability,class) format
+    assert len(detections['Detections'][0])==6
 
 def test_healthcheck(monkeypatch):
     client = TestClient(app)
