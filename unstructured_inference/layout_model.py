@@ -12,14 +12,14 @@ import wget
 from PIL import Image
 from pdf2image import convert_from_bytes,convert_from_path
 from unstructured_inference.inference.layout import LayoutElement, PageLayout, DocumentLayout
-
+import jsons
 S3_SOURCE="https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
 LAYOUT_CLASSES=["Caption","Footnote","Formula","List-item","Page-footer","Page-header","Picture","Section-header","Table","Text","Title"]
 YOLOX_MODEL="/Users/benjamin/Documents/unstructured-inference/.models/yolox_l0.05.onnx"
 output_dir="outputs/"
 
 
-def local_inference(filename,type='image'):
+def local_inference(filename,type='image',to_json=False):
     if not os.path.exists(".models/yolox_l0.05.onnx"):
         wget.download(S3_SOURCE,'.models/yolox_l0.05.onnx')
 
@@ -39,7 +39,12 @@ def local_inference(filename,type='image'):
         # Return a PageLayoutDocument
         detections = image_processing(filename)
         detectedDocument = DocumentLayout ( [detections])
-      
+    
+    # NOTE (Benjamin): This version don't send images in json, could be done in base64 in 
+    # line 88, also, the decoding isn't full, as jsons.load don't recreate PageLayout or LayoutElements
+    if to_json:
+        return jsons.dump(detectedDocument)
+    
     return detectedDocument
 
 def image_processing(page,page_number=0):
@@ -82,7 +87,7 @@ def image_processing(page,page_number=0):
         
         elements.append(element)
 
-    page = PageLayout(number=page_number,image=origin_img,layout=elements)
+    page = PageLayout(number=page_number,image=None,layout=elements) #TODO: encode image as base64?
 
     #if not os.path.exists(output_dir):
     #    os.makedirs(output_dir)

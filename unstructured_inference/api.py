@@ -62,7 +62,7 @@ async def layout_v02_parsing_image(
       
     with tempfile.NamedTemporaryFile() as tmp_file:
         tmp_file.write(files[0].file.read())
-        detections = local_inference(tmp_file.name,type='image')
+        detections = local_inference(tmp_file.name,type='image',to_json=True)
     
     return detections # Already a dictionary
 
@@ -74,7 +74,7 @@ async def layout_v02_parsing_pdf(
 
     with tempfile.NamedTemporaryFile() as tmp_file:
         tmp_file.write(files[0].file.read())
-        detections = local_inference(tmp_file.name,type='pdf')
+        detections = local_inference(tmp_file.name,type='pdf',to_json=True)
     
     return detections # Already a dictionary
 
