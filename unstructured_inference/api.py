@@ -60,12 +60,21 @@ async def layout_v02_parsing_image(
     files: Union[List[UploadFile], None] = File(default=None),
 ):
       
-    # The model was trained and exported with this shape
-    # TODO: check other shapes for inference
-    input_shape = (1024,768) 
     with tempfile.NamedTemporaryFile() as tmp_file:
         tmp_file.write(files[0].file.read())
-        detections = local_inference(tmp_file.name)
+        detections = local_inference(tmp_file.name,type='image')
+    
+    return detections # Already a dictionary
+
+@app.post("/layout/v0.2/pdf")
+async def layout_v02_parsing_pdf(
+    request: Request,
+    files: Union[List[UploadFile], None] = File(default=None),
+):
+
+    with tempfile.NamedTemporaryFile() as tmp_file:
+        tmp_file.write(files[0].file.read())
+        detections = local_inference(tmp_file.name,type='pdf')
     
     return detections # Already a dictionary
 

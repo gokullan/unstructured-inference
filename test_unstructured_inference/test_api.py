@@ -72,11 +72,23 @@ def test_layout_v02_local_parsing_image():
     filename = os.path.join("sample-docs", "test-image.jpg")
     from unstructured_inference.layout_model import local_inference
 
-    detections = local_inference(filename)
+    detections = local_inference(filename,type='image')
     # The example sent to the test contains 13 detections
     assert len(detections['Detections'])==13
     # Each detection should have (x1,y1,x2,y2,probability,class) format
     assert len(detections['Detections'][0])==6
+
+def test_layout_v02_local_parsing_pdf():
+    filename = os.path.join("sample-docs", "loremipsum.pdf")
+    from unstructured_inference.layout_model import local_inference
+
+    detections = local_inference(filename,type='pdf')
+    assert len(detections)==1
+    # The example sent to the test contains 1 page
+    assert len(detections['Detections'])==1
+    assert len(detections['Detections'][0])==5
+    # Each detection should have (x1,y1,x2,y2,probability,class) format
+    assert len(detections['Detections'][0][0])==6
 
 def test_healthcheck(monkeypatch):
     client = TestClient(app)
