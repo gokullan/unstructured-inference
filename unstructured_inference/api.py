@@ -1,23 +1,31 @@
-from fastapi import FastAPI, File, status, Request, UploadFile, Form, HTTPException
-from unstructured_inference.inference.layout import DocumentLayout
-from unstructured_inference.models import get_model
-from typing import List, Union
 import tempfile
-import cv2
-import onnxruntime
-from unstructured_inference.yolox_functions import preproc as preprocess
-from unstructured_inference.yolox_functions import demo_postprocess,multiclass_nms
-from unstructured_inference.visualize import vis
-from unstructured_inference.layout_model import local_inference
-import numpy as np
-import os
-import wget
-from PIL import Image
+from typing import List, Union
 
-S3_SOURCE="https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
-LAYOUT_CLASSES=["Caption","Footnote","Formula","List-item","Page-footer","Page-header","Picture","Section-header","Table","Text","Title"]
-YOLOX_MODEL="/Users/benjamin/Documents/unstructured-inference/.models/yolox_l0.05.onnx"
-output_dir="outputs/"
+from fastapi import (FastAPI, File, Form, HTTPException, Request, UploadFile,
+                     status)
+
+from unstructured_inference.inference.layout import DocumentLayout
+from unstructured_inference.layout_model import local_inference
+from unstructured_inference.models import get_model
+
+S3_SOURCE = (
+    "https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
+)
+LAYOUT_CLASSES = [
+    "Caption",
+    "Footnote",
+    "Formula",
+    "List-item",
+    "Page-footer",
+    "Page-header",
+    "Picture",
+    "Section-header",
+    "Table",
+    "Text",
+    "Title",
+]
+YOLOX_MODEL = "/Users/benjamin/Documents/unstructured-inference/.models/yolox_l0.05.onnx"
+output_dir = "outputs/"
 
 app = FastAPI()
 
@@ -54,17 +62,19 @@ async def layout_parsing_pdf(
 
     return {"pages": pages_layout}
 
+
 @app.post("/layout/v0.2/image")
 async def layout_v02_parsing_image(
     request: Request,
     files: Union[List[UploadFile], None] = File(default=None),
 ):
-      
+
     with tempfile.NamedTemporaryFile() as tmp_file:
         tmp_file.write(files[0].file.read())
-        detections = local_inference(tmp_file.name,type='image',to_json=True)
-    
-    return detections # Already a dictionary
+        detections = local_inference(tmp_file.name, type="image", to_json=True)
+
+    return detections  # Already a dictionary
+
 
 @app.post("/layout/v0.2/pdf")
 async def layout_v02_parsing_pdf(
@@ -74,9 +84,9 @@ async def layout_v02_parsing_pdf(
 
     with tempfile.NamedTemporaryFile() as tmp_file:
         tmp_file.write(files[0].file.read())
-        detections = local_inference(tmp_file.name,type='pdf',to_json=True)
-    
-    return detections # Already a dictionary
+        detections = local_inference(tmp_file.name, type="pdf", to_json=True)
+
+    return detections  # Already a dictionary
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)

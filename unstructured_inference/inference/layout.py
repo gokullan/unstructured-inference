@@ -34,7 +34,7 @@ class DocumentLayout:
     document image analysis (DIA) model detects the layout of the page prior to extracting
     element."""
 
-    def __init__(self, pages = None):
+    def __init__(self, pages=None):
         self._pages = pages
 
     def __str__(self) -> str:
@@ -79,7 +79,7 @@ class PageLayout:
         self,
         number: int,
         image: Image,
-        layout: Union(lp.Layout,LayoutElement),
+        layout: Union(lp.Layout, LayoutElement),
         model: Optional[Detectron2LayoutModel] = None,
     ):
         self.image = image

@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Code based on data_augment.py, demo_utils.py from yolox  
+# Code based on data_augment.py, demo_utils.py from yolox
 # Copyright (c) Megvii, Inc. and its affiliates.
 import numpy as np
 import cv2
 
+
 def format_output(detections):
     pass
+
+
 def preproc(img, input_size, swap=(2, 0, 1)):
     if len(img.shape) == 3:
         padded_img = np.ones((input_size[0], input_size[1], 3), dtype=np.uint8) * 114
@@ -24,6 +27,7 @@ def preproc(img, input_size, swap=(2, 0, 1)):
     padded_img = padded_img.transpose(swap)
     padded_img = np.ascontiguousarray(padded_img, dtype=np.float32)
     return padded_img, r
+
 
 def demo_postprocess(outputs, img_size, p6=False):
 
@@ -52,12 +56,13 @@ def demo_postprocess(outputs, img_size, p6=False):
 
     return outputs
 
+
 def multiclass_nms(boxes, scores, nms_thr, score_thr, class_agnostic=True):
     """Multiclass NMS implemented in Numpy"""
     # TODO: check for non-class agnostic
-    #if class_agnostic:
+    # if class_agnostic:
     nms_method = multiclass_nms_class_agnostic
-    #else:
+    # else:
     #    nms_method = multiclass_nms_class_aware
     return nms_method(boxes, scores, nms_thr, score_thr)
 
@@ -79,6 +84,7 @@ def multiclass_nms_class_agnostic(boxes, scores, nms_thr, score_thr):
             [valid_boxes[keep], valid_scores[keep, None], valid_cls_inds[keep, None]], 1
         )
     return dets
+
 
 def nms(boxes, scores, nms_thr):
     """Single class NMS implemented in Numpy."""
