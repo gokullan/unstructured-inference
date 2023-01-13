@@ -5,7 +5,7 @@ import cv2
 import jsons
 import numpy as np
 import onnxruntime
-import wget  # TODO: to migrate to huggingface
+from huggingface_hub import hf_hub_download
 from pdf2image import convert_from_path
 
 from unstructured_inference.inference.layout import (DocumentLayout,
@@ -15,6 +15,8 @@ from unstructured_inference.yolox_functions import (demo_postprocess,
                                                     multiclass_nms)
 from unstructured_inference.yolox_functions import preproc as preprocess
 
+REPO_ID = "unstructuredio/yolo_x_layout"
+FILENAME = "yolox_l0.05.onnx"
 S3_SOURCE = (
     "https://utic-dev-tech-fixtures.s3.us-east-2.amazonaws.com/layout_model/yolox_l0.05.onnx"
 )
@@ -36,9 +38,10 @@ output_dir = "outputs/"
 
 
 def local_inference(filename, type="image", to_json=False):
+    global YOLOX_MODEL
     if not os.path.exists(".models/yolox_l0.05.onnx"):
-        wget.download(S3_SOURCE, ".models/yolox_l0.05.onnx")
-
+        YOLOX_MODEL = hf_hub_download(REPO_ID, FILENAME)
+        
     pages_paths = []
     detections = []
     detectedDocument = None

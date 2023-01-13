@@ -100,7 +100,7 @@ def test_layout_v02_local_parsing_image():
     # The example image should result in one page result
     assert len(detections.pages) == 1
     # The example sent to the test contains 13 detections
-    assert len(detections.pages[0]["layout"]) == 13
+    assert len(detections.pages[0].layout) == 13
     # Each detection should have (x1,y1,x2,y2,probability,class) format
     # assert len(detections['Detections'][0])==6
 
